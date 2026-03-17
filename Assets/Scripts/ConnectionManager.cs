@@ -40,5 +40,7 @@ public class ConnectionManager : MonoBehaviour
         var allocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
 
         NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(AllocationUtils.ToRelayServerData(allocation, "udp"));
+
+        NetworkManager.Singleton.StartClient();
     }
 }

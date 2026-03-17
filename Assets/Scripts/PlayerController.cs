@@ -23,8 +23,10 @@ public class PlayerController : NetworkBehaviour
         health.OnValueChanged += OnHealthChanged;
         
         //random spawn
-        if(IsOwner) transform.position = new Vector3(
+        if(IsServer) {
+            transform.position = new Vector3(
             Random.Range(-10, 10), 1, Random.Range(-10, 10));
+        }
     }
 
     public void OnDestroy()
@@ -46,6 +48,13 @@ public class PlayerController : NetworkBehaviour
         //movement
         var h = Input.GetAxisRaw("Horizontal");
         var v = Input.GetAxisRaw("Vertical");
+        
+       MoveServerRpc(h, v);
+    }
+
+    [ServerRpc]
+    void MoveServerRpc(float h, float v)
+    {
         var move = (transform.right * h + transform.forward * v).normalized;
         cc.SimpleMove(move * moveSpeed);
     }
